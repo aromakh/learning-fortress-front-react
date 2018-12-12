@@ -37,23 +37,22 @@ class CreateMultipleChoiceForm extends Component {
     const {data} = this.state;
     data.choices.push(choice.choice);
     data.reveals.push(choice.reveal);
-    this.setState({data});
-
     const newChoice = {choice: '', reveal: ''};
+    this.setState({data});
     this.setState({newChoice});
+    this.sendToParent(data);
+  }
+
+  sendToParent(data) {
+    const componentData = { data: data, name: this.state.name };
+    this.props.onQuestionDataChanged(componentData);
   }
 
   handleCorrectAnswerChange = event => {
-    this.setState({correctAnswers: event.target.value});
-  }
-
-  addTextComponent() {
-    const compData = {
-      data: this.state.data,
-      name: this.state.name
-    };
-    this.props.onComponentAdded(compData);
-    this.setState(this.getEmptyState());
+    const {data} = this.state;
+    data.correctAnswers = parseInt(event.target.value) | 0;
+    this.setState({data});
+    this.sendToParent(data);
   }
 
   render() {
@@ -62,7 +61,7 @@ class CreateMultipleChoiceForm extends Component {
         <p>{this.state.name} Component</p>
         <TextField
           label="Correct Answers (number)" margin="normal" variant="outlined" type="number"
-          value={this.state.correctAnswers} onChange={this.handleCorrectAnswerChange}
+          value={this.state.data.correctAnswers} onChange={this.handleCorrectAnswerChange}
         />
         <br />
         <p>Choices</p>
@@ -82,8 +81,6 @@ class CreateMultipleChoiceForm extends Component {
           value={this.state.newChoice.reveal} onChange={this.handleNewChoiceChange('reveal')}
         />
         <Button type="button" variant="contained" onClick={this.addChoice.bind(this)} color="primary">Add Choice</Button>
-        <Divider />
-        <Button type="button" variant="contained" onClick={this.addTextComponent.bind(this)} color="primary">Create</Button>
       </div>
     );
   }
