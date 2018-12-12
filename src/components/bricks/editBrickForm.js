@@ -1,50 +1,36 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-
-import { createBrick } from '../../actions/brickActions';
+import { Link } from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 
-class CreateBrickPage extends Component {
+class EditBrickForm extends Component {
   constructor(props) {
     super(props);
+    const {brick} = props.props;
 
-    this.state = {
-      title: '',
-      subject: '',
-      brief: '',
-      pallet: '',
-      prep: '',
-      summary: ''
-    }
+    this.state = brick
+    console.log(this.state);
   }
 
   handleChange = name => event => {
-    this.setState({[name]: event.target.value});
+    this.props.brick[name] = event.target.value;
   }
 
   handleSubmit (e) {
     e.preventDefault();
-
-    const brick = {
-      title: this.state.title,
-      subject: this.state.subject,
-      brief: this.state.brief,
-      pallet: this.state.pallet,
-      prep: this.state.prep,
-      summary: this.state.summary
-    }
-    this.props.createBrick(brick);
+    console.log('submit');
   }
 
   render() {
+    const brickId = this.props.props.brickId;
+
     return (
       <div className="list-container">
         <p>Creation Brick</p>
-        <form onSubmit={this.handleSubmit.bind(this)} noValidate autoComplete="off">
+        <form onSubmit={this.handleSubmit} noValidate autoComplete="off">
           <TextField
             label="Title" margin="normal" variant="outlined"
             value={this.state.title} onChange={this.handleChange('title')}
@@ -71,22 +57,12 @@ class CreateBrickPage extends Component {
             value={this.state.summary} onChange={this.handleChange('summary')}
           />
           <br />
-          <Button type="submit" variant="contained" color="primary">
-            Create Brick
-          </Button>
+          <Button type="submit" variant="contained" color="primary">Update Brick</Button>
+          <Link to={`/brick/${brickId}/question`}><Button type="button" variant="contained" color="primary">Add Question</Button></Link>
         </form>
       </div>
     );
   }
 }
 
-CreateBrickPage.propTypes = {
-  title: PropTypes.string.isRequired,
-  subject: PropTypes.string.isRequired,
-  brief: PropTypes.string.isRequired,
-  pallet: PropTypes.string.isRequired,
-  prep: PropTypes.string.isRequired,
-  summary: PropTypes.string.isRequired
-};
-
-export default connect(null, { createBrick })(CreateBrickPage);
+export default EditBrickForm;

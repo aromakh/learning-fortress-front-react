@@ -1,8 +1,8 @@
-import { FETCH_BRICKS, NEW_BRICK } from '../actions/types';
+import { FETCH_BRICKS, FETCH_BRICK, NEW_BRICK, EDIT_BRICK } from '../actions/types';
 
 const initialState = {
-    items: [],
-    item: {}
+  items: [],
+  item: {}
 };
 
 export default function(state = initialState, action) {
@@ -11,6 +11,21 @@ export default function(state = initialState, action) {
       return {
           ...state,
           items: action.payload
+      }
+    case FETCH_BRICK:
+      return {
+        ...state,
+        item: action.payload
+      }
+    case NEW_BRICK:
+      return {
+        ...state,
+        item: action.payload
+      }
+    case EDIT_BRICK:
+      return {
+        ...state,
+        item: action.payload
       }
     default:
       return state;
