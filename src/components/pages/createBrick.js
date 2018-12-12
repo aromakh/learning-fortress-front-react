@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { createBrick } from '../../actions/brickActions';
@@ -79,14 +78,5 @@ class CreateBrickPage extends Component {
     );
   }
 }
-
-CreateBrickPage.propTypes = {
-  title: PropTypes.string.isRequired,
-  subject: PropTypes.string.isRequired,
-  brief: PropTypes.string.isRequired,
-  pallet: PropTypes.string.isRequired,
-  prep: PropTypes.string.isRequired,
-  summary: PropTypes.string.isRequired
-};
 
 export default connect(null, { createBrick })(CreateBrickPage);

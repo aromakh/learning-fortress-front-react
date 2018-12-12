@@ -1,4 +1,4 @@
-import { NEW_QUESTION, FETCH_QUESTION, EDIT_QUESTION } from './types';
+import { NEW_QUESTION } from './types';
 
 const HOST_NAME = 'http://localhost:3001';
 

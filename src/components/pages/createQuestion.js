@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -16,7 +15,7 @@ import Divider from '@material-ui/core/Divider';
 
 import { createQuestion } from '../../actions/questionActions';
 
-import CreateComponentForm from '../components/createComponentForm';
+import CreateComponentForm from '../questions/createComponentForm';
 
 
 const styles = theme => ({
@@ -54,8 +53,9 @@ class CreateQuestionPage extends Component {
     super(props);
 
     this.state = {
-      components: [],
-      componentTypes: [
+      textComponent: this.getTextComponent(''),
+      mainComponent: { data: {}, name: '' },
+      questionTypes: [
         'Arrow',
         'HorizontalShuffle',
         'LineHighlighting',
@@ -64,14 +64,17 @@ class CreateQuestionPage extends Component {
         'ShortAnswer',
         'SingleChoice',
         'Sort',
-        'Text',
         'TextDropdowns',
         'TextHighlighting'
       ],
       questionId: '',
-      newComponentType: '',
+      newQuestionType: '',
       number: 0
     }
+  }
+
+  getTextComponent(text) {
+    return { data: {text}, name: 'Text'};
   }
 
   handleNumberChange = event => {
@@ -82,8 +85,13 @@ class CreateQuestionPage extends Component {
     this.setState({ questionId: event.target.value });
   }
 
-  handleNewComponentTypeChange = event => {
-    this.setState({ newComponentType: event.target.value });
+  handleQuestionTypeChange = event => {
+    this.setState({ newQuestionType: event.target.value });
+  }
+
+  handleTextChange = event => {
+    const textComponent = this.getTextComponent(event.target.value);
+    this.setState({ textComponent });
   }
 
   handleSubmit (e) {
@@ -91,23 +99,17 @@ class CreateQuestionPage extends Component {
     const {questionId} = this.state;
 
     const question = {
-      components: this.state.components,
+      components: [this.state.textComponent, this.state.mainComponent],
       number: this.state.number
     };
-    const props = this.props;
-    this.props.createQuestion(brickId, questionId, question)
-      .then(res => {
-        if (res.success) {
-
-        }
-      });
+ 
+    console.log(question);
+    this.props.createQuestion(brickId, questionId, question).then(res => {});
   }
 
-  addComponent(newComponent) {
-    this.setState(prevState => ({
-      components: [...prevState.components, newComponent]
-    }))
-    console.log('add component', newComponent );
+  onQuestionDataChanged(mainComponent) {
+    this.setState({mainComponent});
+    console.log(this.state);
   }
 
   render() {
@@ -125,41 +127,32 @@ class CreateQuestionPage extends Component {
               label="Number" margin="normal" variant="outlined" type="number"
               value={this.state.number} onChange={this.handleNumberChange}
             />
+            <br/>
+            <TextField
+              label="Text" margin="normal" variant="outlined" type="text"
+              value={this.state.textComponent.data.text} onChange={this.handleTextChange}
+            />
           </CardContent>
           <Divider light component="div" />
           <CardContent>
             <FormControl>
-              Components
-            </FormControl>
-            <br />
-            {
-              this.state.components.map((component, index) => {
-                return <p key={index}>{index + 1} {component.name}</p>;
-              })
-            }
-          </CardContent>
-          <Divider light component="div" />
-          <CardContent>
-            <p>New Component:</p>
-            <br />
-            <FormControl>
-              <InputLabel shrink htmlFor="question-type-label-placeholder">New Component Type</InputLabel>
+              <InputLabel shrink htmlFor="question-type-label-placeholder">Question Type</InputLabel>
               <Select
                 className={classes.select}
-                value={this.state.newComponentType}
-                onChange={this.handleNewComponentTypeChange}
-                input={<Input name="componentType" id="component-type-label-placeholder" />}
+                value={this.state.newQuestionType}
+                onChange={this.handleQuestionTypeChange}
+                input={<Input name="questionType" id="question-type-label-placeholder" />}
                 displayEmpty
               >
               {
-                this.state.componentTypes.map((componentType, index) => {
-                  return <MenuItem key={index} value={componentType}>{componentType}</MenuItem>;
+                this.state.questionTypes.map((questionType, index) => {
+                  return <MenuItem key={index} value={questionType}>{questionType}</MenuItem>;
                 })
               }
               </Select>
             </FormControl>
             <br />
-            <CreateComponentForm componentType={this.state.newComponentType} onComponentAdded={this.addComponent.bind(this)}></CreateComponentForm>
+            <CreateComponentForm questionType={this.state.newQuestionType} onQuestionDataChanged={this.onQuestionDataChanged.bind(this)}></CreateComponentForm>
           </CardContent>
           <Divider light component="div" />
           <CardContent>
