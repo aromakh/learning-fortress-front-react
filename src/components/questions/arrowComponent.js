@@ -37,7 +37,7 @@ class CreateArrowComponentForm extends Component {
     this.setState({newChoice: this.getNewChoice()});
     this.setState({data});
 
-    var componentData = {
+    const componentData = {
       data: this.state.data,
       name: this.state.name
     };

@@ -109,7 +109,6 @@ class CreateQuestionPage extends Component {
 
   onQuestionDataChanged(mainComponent) {
     this.setState({mainComponent});
-    console.log(this.state);
   }
 
   render() {
