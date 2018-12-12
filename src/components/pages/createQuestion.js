@@ -14,7 +14,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
 
-import { createBrick } from '../../actions/brickActions';
+import { createQuestion } from '../../actions/questionActions';
 
 import CreateComponentForm from '../components/createComponentForm';
 
@@ -68,6 +68,7 @@ class CreateQuestionPage extends Component {
         'TextDropdowns',
         'TextHighlighting'
       ],
+      questionId: '',
       newComponentType: '',
       number: 0
     }
@@ -77,12 +78,29 @@ class CreateQuestionPage extends Component {
     this.setState({ number: event.target.value });
   }
 
+  handleQuestionIdChange = event => {
+    this.setState({ questionId: event.target.value });
+  }
+
   handleNewComponentTypeChange = event => {
     this.setState({ newComponentType: event.target.value });
   }
 
   handleSubmit (e) {
-    e.preventDefault();
+    const {brickId} = this.props.match.params;
+    const {questionId} = this.state;
+
+    const question = {
+      components: this.state.components,
+      number: this.state.number
+    };
+    const props = this.props;
+    this.props.createQuestion(brickId, questionId, question)
+      .then(res => {
+        if (res.success) {
+
+        }
+      });
   }
 
   addComponent(newComponent) {
@@ -94,14 +112,17 @@ class CreateQuestionPage extends Component {
 
   render() {
     const { classes } = this.props;
-
     return (
       <div className={classes.root}>
         <Card className={classes.card}>
           <CardContent>
             <p>Creation Question</p>
             <TextField
-              label="Number" margin="normal" variant="outlined"
+              label="Id" margin="normal" variant="outlined"
+              value={this.state.questionId} onChange={this.handleQuestionIdChange}
+            />
+            <TextField
+              label="Number" margin="normal" variant="outlined" type="number"
               value={this.state.number} onChange={this.handleNumberChange}
             />
           </CardContent>
@@ -142,7 +163,7 @@ class CreateQuestionPage extends Component {
           </CardContent>
           <Divider light component="div" />
           <CardContent>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" onClick={this.handleSubmit.bind(this)} color="primary">
               Create Question
             </Button>
           </CardContent>
@@ -155,4 +176,4 @@ class CreateQuestionPage extends Component {
 CreateQuestionPage.propTypes = {
 };
 
-export default connect(null, { createBrick })(withStyles(styles)(CreateQuestionPage));
+export default connect(null, { createQuestion })(withStyles(styles)(CreateQuestionPage));

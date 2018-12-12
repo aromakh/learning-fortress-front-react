@@ -1,4 +1,5 @@
 import { FETCH_BRICKS, FETCH_BRICK, NEW_BRICK, EDIT_BRICK } from './types';
+
 const HOST_NAME = 'http://localhost:3001';
 
 export const fetchBricks = () => dispatch => {

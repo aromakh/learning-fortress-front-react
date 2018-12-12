@@ -27,9 +27,9 @@ function Header(props) {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.grow}>
-            News
+            Bricks Editor
           </Typography>
-          <Button><Link to='/bricks'>Bricks</Link></Button>
+          <Button><Link to='/brick'>Bricks</Link></Button>
           <Button><Link to='/create-brick'>Create Brick</Link></Button>
         </Toolbar>
       </AppBar>

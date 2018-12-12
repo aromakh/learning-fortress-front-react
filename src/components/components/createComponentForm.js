@@ -30,7 +30,6 @@ class CreateComponentForm extends Component {
 
   render() {
     const {componentType} = this.props;
-    console.log(this.props);
     if (componentType === 'Arrow') {
       return <CreateArrowComponentForm onComponentAdded={this.props.onComponentAdded}></CreateArrowComponentForm>
     } else if (componentType === 'HorizontalShuffle') {
